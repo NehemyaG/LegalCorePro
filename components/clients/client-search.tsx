@@ -34,6 +34,7 @@ import {
 } from 'lucide-react'
 import { ClientSearchFilters } from '@/types/client'
 import { format } from 'date-fns'
+import { DateRange } from 'react-day-picker'
 import { cn } from '@/lib/utils'
 
 interface ClientSearchProps {
@@ -70,13 +71,14 @@ export function ClientSearch({
     to: filters.dateRange ? new Date(filters.dateRange.end) : undefined
   })
 
-  const handleDateRangeChange = (range: { from: Date | undefined; to: Date | undefined }) => {
-    setDateRange(range)
-    if (range.from && range.to) {
+  const handleDateRangeChange = (range: DateRange | undefined) => {
+    const dateRange = range || { from: undefined, to: undefined }
+    setDateRange(dateRange)
+    if (dateRange.from && dateRange.to) {
       onFiltersChange({
         dateRange: {
-          start: range.from.toISOString(),
-          end: range.to.toISOString()
+          start: dateRange.from.toISOString(),
+          end: dateRange.to.toISOString()
         }
       })
     } else {
