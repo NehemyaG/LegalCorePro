@@ -63,22 +63,22 @@ export function ClientSearch({
   availableTags
 }: ClientSearchProps) {
   const [showAdvancedFilters, setShowAdvancedFilters] = useState(false)
-  const [dateRange, setDateRange] = useState<{
-    from: Date | undefined
-    to: Date | undefined
-  }>({
+  const [dateRange, setDateRange] = useState<DateRange>({
     from: filters.dateRange ? new Date(filters.dateRange.start) : undefined,
     to: filters.dateRange ? new Date(filters.dateRange.end) : undefined
   })
 
   const handleDateRangeChange = (range: DateRange | undefined) => {
-    const dateRange = range || { from: undefined, to: undefined }
-    setDateRange(dateRange)
-    if (dateRange.from && dateRange.to) {
+    const newDateRange: DateRange = {
+      from: range?.from,
+      to: range?.to
+    }
+    setDateRange(newDateRange)
+    if (newDateRange.from && newDateRange.to) {
       onFiltersChange({
         dateRange: {
-          start: dateRange.from.toISOString(),
-          end: dateRange.to.toISOString()
+          start: newDateRange.from.toISOString(),
+          end: newDateRange.to.toISOString()
         }
       })
     } else {
