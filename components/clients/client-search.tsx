@@ -63,22 +63,21 @@ export function ClientSearch({
   availableTags
 }: ClientSearchProps) {
   const [showAdvancedFilters, setShowAdvancedFilters] = useState(false)
-  const [dateRange, setDateRange] = useState<DateRange>({
+  const [dateRange, setDateRange] = useState<DateRange | undefined>({
     from: filters.dateRange ? new Date(filters.dateRange.start) : undefined,
     to: filters.dateRange ? new Date(filters.dateRange.end) : undefined
   })
 
   const handleDateRangeChange = (range: DateRange | undefined) => {
-    const newDateRange: DateRange = {
-      from: range?.from,
-      to: range?.to
+    setDateRange(range)
+    if (range?.from && range?.to) {
     }
     setDateRange(newDateRange)
     if (newDateRange.from && newDateRange.to) {
       onFiltersChange({
         dateRange: {
-          start: newDateRange.from.toISOString(),
-          end: newDateRange.to.toISOString()
+          start: range.from.toISOString(),
+          end: range.to.toISOString()
         }
       })
     } else {
@@ -299,12 +298,12 @@ export function ClientSearch({
                       variant="outline"
                       className={cn(
                         "w-full justify-start text-left font-normal",
-                        !dateRange.from && "text-muted-foreground"
+                        !dateRange?.from && "text-muted-foreground"
                       )}
                     >
                       <CalendarIcon className="mr-2 h-4 w-4" />
-                      {dateRange.from ? (
-                        dateRange.to ? (
+                      {dateRange?.from ? (
+                        dateRange?.to ? (
                           <>
                             {format(dateRange.from, "LLL dd, y")} -{" "}
                             {format(dateRange.to, "LLL dd, y")}
@@ -321,7 +320,7 @@ export function ClientSearch({
                     <Calendar
                       initialFocus
                       mode="range"
-                      defaultMonth={dateRange.from}
+                      defaultMonth={dateRange?.from}
                       selected={dateRange}
                       onSelect={handleDateRangeChange}
                       numberOfMonths={2}
@@ -406,7 +405,7 @@ export function ClientSearch({
                 Date: {format(new Date(filters.dateRange.start), "MMM dd")} - {format(new Date(filters.dateRange.end), "MMM dd")}
                 <X 
                   className="w-3 h-3 cursor-pointer" 
-                  onClick={() => handleDateRangeChange({ from: undefined, to: undefined })}
+                  onClick={() => handleDateRangeChange(undefined)}
                 />
               </Badge>
             )}
