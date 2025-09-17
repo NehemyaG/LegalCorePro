@@ -71,9 +71,6 @@ export function ClientSearch({
   const handleDateRangeChange = (range: DateRange | undefined) => {
     setDateRange(range)
     if (range?.from && range?.to) {
-    }
-    setDateRange(newDateRange)
-    if (newDateRange.from && newDateRange.to) {
       onFiltersChange({
         dateRange: {
           start: range.from.toISOString(),
